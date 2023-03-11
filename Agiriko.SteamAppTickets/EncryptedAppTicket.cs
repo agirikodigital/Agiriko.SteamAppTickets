@@ -1,4 +1,6 @@
-﻿namespace Agiriko.SteamAppTickets
+﻿using Agiriko.SteamAppTickets.Native;
+
+namespace Agiriko.SteamAppTickets
 {
     /// <summary>
     /// A steam encrypted app ticket.
@@ -24,9 +26,9 @@
         /// </summary>
         /// <param name="appId">The app id.</param>
         /// <returns>Whether this ticket is for the app.</returns>
-        public bool IsTicketForApp(ulong appId)
+        public bool IsTicketForApp(uint appId)
         {
-            return false;
+            return Wrappers.BIsTicketForApp(_data, appId);
         }
 
         /// <summary>
@@ -34,9 +36,9 @@
         /// </summary>
         /// <param name="appId">The app id to check.</param>
         /// <returns>Whether the ticket owner owns a given app id.</returns>
-        public bool UserOwnsAppInTicket(ulong appId)
+        public bool UserOwnsAppInTicket(uint appId)
         {
-            return false;
+            return Wrappers.BUserOwnsAppInTicket(_data, appId);
         }
 
         /// <summary>
@@ -45,25 +47,26 @@
         /// <returns>Whether the owner of this app ticket is VAC banned.</returns>
         public bool IsUserVACBanned()
         {
-            return false;
+            return Wrappers.BUserIsVacBanned(_data);
         }
 
         /// <summary>
         /// Gets the app id associated with this ticket.
         /// </summary>
         /// <returns>The app id associated with this ticket.</returns>
-        public ulong GetAppId()
+        public uint GetAppId()
         {
-            return 0;
+            return Wrappers.GetTicketAppID(_data);
         }
 
         /// <summary>
-        /// Returns the issuing time for this ticket.
+        /// Returns the issuing time for this ticket (UTC).
         /// </summary>
         /// <returns>The issuing time for this ticket.</returns>
-        public DateTime? GetIssueTime()
+        public DateTimeOffset? GetIssueTime()
         {
-            return null;
+            var timestamp = Wrappers.GetTicketIssueTime(_data);
+            return DateTimeOffset.FromUnixTimeSeconds(timestamp);
         }
 
         /// <summary>
@@ -72,7 +75,7 @@
         /// <returns>The steam id associated with this ticket.</returns>
         public ulong? GetSteamId()
         {
-            return null;
+            return Wrappers.GetTicketSteamID(_data);
         }
 
         /// <summary>
