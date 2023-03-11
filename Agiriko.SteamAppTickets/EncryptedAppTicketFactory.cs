@@ -1,9 +1,11 @@
-﻿namespace Agiriko.SteamAppTickets
+﻿using Agiriko.SteamAppTickets.Native;
+
+namespace Agiriko.SteamAppTickets
 {
     /// <summary>
     /// Factory class for decrypting app tickets.
     /// </summary>
-    public class EncryptedAppTicketFactory
+    public sealed class EncryptedAppTicketFactory
     {
         /// <summary>
         /// The encrypted app ticket decryption key.
@@ -20,12 +22,18 @@
         }
 
         /// <summary>
-        /// Decrypt an encrypted app ticket.
+        /// Decrypts a ticket given its encrypted data.
         /// </summary>
-        /// <returns></returns>
-        public EncryptedAppTicket Decrypt()
+        /// <param name="encryptedTicket">The encrypted ticket data.</param>
+        /// <returns>The decrypted ticket.</returns>
+        /// <exception cref="InvalidTicketException">Thrown whenever the supplied ticket is invalid.</exception>
+        public EncryptedAppTicket Decrypt(byte[] encryptedTicket)
         {
-            return new EncryptedAppTicket();
+            var ticketData = Wrappers.BDecryptTicket(encryptedTicket, _key);
+            if (ticketData == null)
+                throw new InvalidTicketException();
+
+            return new EncryptedAppTicket(ticketData!);
         }
     }
 }

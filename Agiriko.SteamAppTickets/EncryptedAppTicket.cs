@@ -6,6 +6,20 @@
     public sealed class EncryptedAppTicket
     {
         /// <summary>
+        /// The data for this ticket.
+        /// </summary>
+        private readonly byte[] _data;
+
+        /// <summary>
+        /// Creates a new encrypted app ticket from the decrypted data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        internal EncryptedAppTicket(byte[] data)
+        {
+            _data = data;
+        }
+
+        /// <summary>
         /// Is this ticket for an app given by appId.
         /// </summary>
         /// <param name="appId">The app id.</param>
