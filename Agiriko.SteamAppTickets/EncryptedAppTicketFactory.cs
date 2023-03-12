@@ -8,6 +8,11 @@ namespace Agiriko.SteamAppTickets
     public sealed class EncryptedAppTicketFactory
     {
         /// <summary>
+        /// The maximum length of the key.
+        /// </summary>
+        private const int k_nSteamEncryptedAppTicketSymmetricKeyLen = 32;
+
+        /// <summary>
         /// The encrypted app ticket decryption key.
         /// </summary>
         private readonly byte[] _key;
@@ -18,6 +23,9 @@ namespace Agiriko.SteamAppTickets
         /// <param name="key">The key.</param>
         public EncryptedAppTicketFactory(byte[] key)
         {
+            if (key.Length > k_nSteamEncryptedAppTicketSymmetricKeyLen)
+                throw new InvalidKeyException($"The supplied key is too long. (The key is {key.Length} bytes long, while the maximum is {k_nSteamEncryptedAppTicketSymmetricKeyLen}.)");
+            
             _key = key;
         }
 
