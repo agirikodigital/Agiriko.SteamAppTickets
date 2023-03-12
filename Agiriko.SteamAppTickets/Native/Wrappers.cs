@@ -9,8 +9,8 @@ namespace Agiriko.SteamAppTickets.Native
     {
         private const string LIBRARY_NAME = "sdkencryptedappticket";
 
-        [DllImport(LIBRARY_NAME)]
-        private static extern bool SteamEncryptedAppTicket_BDecryptTicket(byte[] rgubTicketEncrypted, uint cubTicketEncrypted, ref byte[] rgubTicketDecrypted, ref uint pcubTicketDecrypted, byte[] rgubKey, int cubKey);
+        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
+        private static extern bool SteamEncryptedAppTicket_BDecryptTicket(byte[] rgubTicketEncrypted, uint cubTicketEncrypted, byte[] rgubTicketDecrypted, ref uint pcubTicketDecrypted, byte[] rgubKey, int cubKey);
 
         /// <summary>
         /// Decrypt a ticket via its key and data.
@@ -23,7 +23,7 @@ namespace Agiriko.SteamAppTickets.Native
             var outTicket = new byte[1024];
             var outTicketSize = (uint)outTicket.Length;
 
-            var success = SteamEncryptedAppTicket_BDecryptTicket(ticket, (uint)ticket.Length, ref outTicket, ref outTicketSize, key, key.Length);
+            var success = SteamEncryptedAppTicket_BDecryptTicket(ticket, (uint)ticket.Length, outTicket, ref outTicketSize, key, key.Length);
             if (!success)
                 return null;
 
@@ -32,7 +32,8 @@ namespace Agiriko.SteamAppTickets.Native
             return outTicket;
         }
 
-        [DllImport(LIBRARY_NAME)]
+        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool SteamEncryptedAppTicket_BIsTicketForApp(byte[] rgubTicketDecrypted, uint cubTicketDecrypted, uint nAppID);
 
         /// <summary>
@@ -46,7 +47,8 @@ namespace Agiriko.SteamAppTickets.Native
             return SteamEncryptedAppTicket_BIsTicketForApp(ticket, (uint)ticket.Length, appId);
         }
 
-        [DllImport(LIBRARY_NAME)]
+        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool SteamEncryptedAppTicket_BUserIsVacBanned(byte[] rgubTicketDecrypted, uint cubTicketDecrypted);
 
         /// <summary>
@@ -59,7 +61,8 @@ namespace Agiriko.SteamAppTickets.Native
             return SteamEncryptedAppTicket_BUserIsVacBanned(ticket, (uint)ticket.Length);
         }
 
-        [DllImport(LIBRARY_NAME)]
+        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool SteamEncryptedAppTicket_BUserOwnsAppInTicket(byte[] rgubTicketDecrypted, uint cubTicketDecrypted, uint nAppID);
 
         /// <summary>
@@ -73,7 +76,7 @@ namespace Agiriko.SteamAppTickets.Native
             return SteamEncryptedAppTicket_BUserOwnsAppInTicket(ticket, (uint)ticket.Length, appId);
         }
 
-        [DllImport(LIBRARY_NAME)]
+        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
         private static extern uint SteamEncryptedAppTicket_GetTicketAppID(byte[] rgubTicketDecrypted, uint cubTicketDecrypted);
 
         /// <summary>
@@ -86,7 +89,7 @@ namespace Agiriko.SteamAppTickets.Native
             return SteamEncryptedAppTicket_GetTicketAppID(ticket, (uint)ticket.Length);
         }
 
-        [DllImport(LIBRARY_NAME)]
+        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
         private static extern uint SteamEncryptedAppTicket_GetTicketIssueTime(byte[] rgubTicketDecrypted, uint cubTicketDecrypted);
 
         /// <summary>
@@ -99,7 +102,7 @@ namespace Agiriko.SteamAppTickets.Native
             return SteamEncryptedAppTicket_GetTicketIssueTime(ticket, (uint)ticket.Length);
         }
 
-        [DllImport(LIBRARY_NAME)]
+        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SteamEncryptedAppTicket_GetTicketSteamID(byte[] rgubTicketDecrypted, uint cubTicketDecrypted, out CSteamID psteamID);
 
         /// <summary>
