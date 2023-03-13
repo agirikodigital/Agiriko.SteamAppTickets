@@ -84,7 +84,7 @@ namespace Agiriko.SteamAppTickets
         /// <returns>The variable data supplied by the user.</returns>
         public byte[]? GetVariableData()
         {
-            return null;
+            return Wrappers.GetUserVariableData(_data);
         }
     }
 }

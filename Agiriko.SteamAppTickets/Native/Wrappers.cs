@@ -118,5 +118,26 @@ namespace Agiriko.SteamAppTickets.Native
 
             return steamId.idBits;
         }
+
+        [DllImport(LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr SteamEncryptedAppTicket_GetUserVariableData(byte[] rgubTicketDecrypted, uint cubTicketDecrypted, out uint pcubUserData);
+
+        /// <summary>
+        /// Gets the internal variable data from the ticket.
+        /// </summary>
+        /// <param name="ticket">The decoded ticket.</param>
+        /// <returns>The variable data as a byte array.</returns>
+        internal static byte[]? GetUserVariableData(byte[] ticket)
+        {
+            var dataPtr = SteamEncryptedAppTicket_GetUserVariableData(ticket, (uint)ticket.Length, out uint dataLength);
+
+            if (dataLength == 0)
+                return null;
+
+            var data = new byte[dataLength];
+            Marshal.Copy(dataPtr, data, 0, (int)dataLength);
+
+            return data;
+        }
     }
 }
