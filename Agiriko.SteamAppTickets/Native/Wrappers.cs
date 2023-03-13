@@ -5,7 +5,7 @@ namespace Agiriko.SteamAppTickets.Native
     /// <summary>
     /// Wrappers for the Steamworks APIs.
     /// </summary>
-    internal class Wrappers
+    internal static class Wrappers
     {
         private const string LIBRARY_NAME = "sdkencryptedappticket";
 

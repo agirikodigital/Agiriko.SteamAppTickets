@@ -6,9 +6,9 @@ namespace Agiriko.SteamAppTickets.Native
     /// Internal steamworks struct used for representing the steam id.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct CSteamID
+    internal readonly struct CSteamID
     {
-        public ulong idBits;
+        public readonly ulong idBits;
 
         /// <summary>
         /// Checks whether this steam id is a null id.
